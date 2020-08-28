@@ -1,3 +1,6 @@
+from utils import open_automaton
+
+
 def testar_string(afd, string):
     """
     Testa se um string e aceita pelo automato
@@ -17,3 +20,8 @@ def testar_string(afd, string):
         return True
 
     return False
+
+
+afd_1 = open_automaton('afd_1.json')
+check = testar_string(afd_1, '0110')
+print(check)
