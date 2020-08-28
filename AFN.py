@@ -1,4 +1,4 @@
-from modelo_automato import automaton
+from utils import open_automaton
 
 
 def verificar_e_closure(afn, estado_atual):
@@ -55,5 +55,6 @@ def testar_string(afn, string):
     return False
 
 
-check = testar_string(automaton, '0110')
+afn_1 = open_automaton('afn_1.json')
+check = testar_string(afn_1, '0110')
 print(check)
