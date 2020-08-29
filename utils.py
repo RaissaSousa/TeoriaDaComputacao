@@ -39,6 +39,10 @@ def convert_afn_to_afd(afn):
             for novo_estado in funcao_de_transicao.values():
                 if novo_estado not in afd['states']:
                     estados_atuais.append(novo_estado)
+                    for estado_final in afn['final']:
+                        if estado_final in novo_estado and novo_estado not in afd['final']:
+                            afd['final'].append(novo_estado)
+
             afd['states'][estado] = funcao_de_transicao
             estados_atuais.remove(estado)
 
@@ -50,8 +54,3 @@ def open_automaton(path):
         automaton = json.load(json_file)
 
     return automaton
-
-
-afn_1 = open_automaton('afn_2.json')
-afd = convert_afn_to_afd(afn_1)
-print(afd)
