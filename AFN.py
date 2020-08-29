@@ -1,6 +1,3 @@
-from utils import open_automaton
-
-
 def verificar_e_closure(afn, estado_atual):
     """
     Verificar se ha estados alcancaveis através de transicoes e-closure
@@ -32,7 +29,7 @@ def testar_string(afn, string):
     Testa se um string e aceita pelo automato
     :param afn: automato finito nao deterministico
     :param string: string a ser testada
-    :return: True ou False
+    :return: True ou False, ultimos estados acessados
     """
     estados_atuais = [afn['initial']]
 
@@ -50,11 +47,6 @@ def testar_string(afn, string):
 
     for estado in estados_atuais:
         if estado in afn['final']:
-            return True
+            return True, estados_atuais
 
-    return False
-
-
-afn_1 = open_automaton('afn_1.json')
-check = testar_string(afn_1, '0110')
-print(check)
+    return False, estados_atuais
