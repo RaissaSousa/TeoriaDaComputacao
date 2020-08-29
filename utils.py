@@ -16,7 +16,7 @@ def _get_new_states(afn, estado):
     for simbolo in afn['states'][estado]:
         _, estados_alcancaveis = AFN.testar_string(afn, simbolo)
         novo_estado = ','.join(estados_alcancaveis)
-        funcao_de_transicao.update({simbolo: novo_estado})
+        funcao_de_transicao.update({simbolo: novo_estado})          #mescla os dicionarios
     return funcao_de_transicao
 
 
@@ -31,12 +31,12 @@ def convert_afn_to_afd(afn):
             if ',' in estado:                   # se o estado for um conjunto de estados ex: {'q0,q1'}
                 funcao_de_transicao = {}
                 for estado_item in estado.split(','):  # pega cada estado-item do estado-conjunto, ex: 'q1' e 'q2' separadamente
-                    nova_funcao_de_transicao = _get_new_states(afn, estado_item)
-                    funcao_de_transicao = _union_dict(funcao_de_transicao, nova_funcao_de_transicao)       # união
+                    funcao_de_transicao_item = _get_new_states(afn, estado_item)
+                    funcao_de_transicao = _union_dict(funcao_de_transicao, funcao_de_transicao_item)       # união
             else:
                 funcao_de_transicao = _get_new_states(afn, estado)
 
-            for novo_estado in funcao_de_transicao.values():
+            for novo_estado in funcao_de_transicao.values():    #novos estados descobertos
                 if novo_estado not in afd['states']:
                     estados_atuais.append(novo_estado)
                     for estado_final in afn['final']:

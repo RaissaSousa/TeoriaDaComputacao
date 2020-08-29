@@ -6,22 +6,22 @@ def verificar_e_closure(afn, estado_atual):
     :param estado_atual:
     :return: lista de estados alcancaveis concatenado com o estado atual
     """
-    estados_atuais = [estado_atual]
-    estados_e_closure = [estado_atual]
+    estados_para_testar = [estado_atual]
+    estados_encontrados = [estado_atual]
 
-    while len(estados_atuais) > 0:
-        for estado in estados_atuais.copy():
+    while len(estados_para_testar) > 0:
+        for estado in estados_para_testar.copy():
             if 'e' in afn['states'][estado]:
                 transacoes_e_closure = afn['states'][estado]['e']
 
                 for estado_alcancavel in transacoes_e_closure:
-                    if estado_alcancavel not in estados_e_closure:
-                        estados_atuais.append(estado_alcancavel)
-                        estados_e_closure.append(estado_alcancavel)
+                    if estado_alcancavel not in estados_encontrados:
+                        estados_para_testar.append(estado_alcancavel)
+                        estados_encontrados.append(estado_alcancavel)
 
-            estados_atuais.remove(estado)
+            estados_para_testar.remove(estado)
 
-    return estados_e_closure
+    return estados_encontrados
 
 
 def testar_string(afn, string):
@@ -41,7 +41,7 @@ def testar_string(afn, string):
 
             for estado in estados_atuais_alcancaveis:
                 if simbolo in afn['states'][estado]:
-                    proximos_estados += afn['states'][estado][simbolo]
+                    proximos_estados += afn['states'][estado][simbolo]  # mescla as duas listas
 
         estados_atuais = proximos_estados
 
