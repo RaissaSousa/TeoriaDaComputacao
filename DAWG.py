@@ -194,7 +194,6 @@ def testar_dawg_arquivo_convertendo_AFD(dawg, path):
     [S_plus, S_minus] = _open_teste_dawg_arquivo(path)
     acertos = 0
     total = len(S_plus) + len(S_minus)
-    tempo = []
 
     dawg = convert_afn_to_afd(dawg)
 
