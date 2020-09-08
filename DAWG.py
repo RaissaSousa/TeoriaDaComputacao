@@ -1,12 +1,5 @@
 from copy import deepcopy as copy
-
 import AFN
-
-Sp = ['aba', 'baa', 'b']
-Sm = ['a', 'bab', 'aaa']
-
-PSp = ['e', 'a', 'ab', 'aba', 'b', 'ba', 'baa']
-
 
 def _ordenar_potencia(potencia):
     potencia_ordenada = {}
@@ -101,8 +94,8 @@ def _build(dawg, estados):
     return novos_estados
 
 
-def contruir_dawg():
-    dawg = {'initial': ','.join(Sp), 'final': ['{e}'], 'alphabet': ['a', 'b'], 'states': {'{e}': {}}}
+def contruir_dawg(S_plus, S_minus):
+    dawg = {'initial': ','.join(S_plus), 'final': ['{e}'], 'alphabet': ['a', 'b'], 'states': {'{e}': {}}}
     novos_estados = [dawg['initial'].split(',')]
 
     while len(novos_estados) > 0:
@@ -111,7 +104,5 @@ def contruir_dawg():
 
             novos_estados.remove(novo_estado)
 
-    dawg_e = _extend(dawg, Sm)
+    dawg_e = _extend(dawg, S_minus)
     print(dawg_e)
-
-contruir_dawg()

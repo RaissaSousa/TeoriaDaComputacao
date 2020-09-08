@@ -21,7 +21,7 @@ def _get_new_states(afn, estado):
 
 
 def convert_afn_to_afd(afn):
-    afd = {'initial': afn['initial'], 'final': [], 'states': {}}
+    afd = {'initial': afn['initial'], 'alphabet': afn['alphabet'], 'final': [], 'states': {}}
     estados_atuais = [afn['initial']]
 
     while len(estados_atuais) > 0:

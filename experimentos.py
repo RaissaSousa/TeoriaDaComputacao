@@ -1,3 +1,4 @@
+from DAWG import contruir_dawg
 from utils import open_automaton, convert_afn_to_afd
 import AFN
 import AFD
@@ -21,3 +22,9 @@ print(afd)
 afn_4 = open_automaton('afn_4.json')
 afd = convert_afn_to_afd(afn_4)
 print(afd)
+
+# =============== dawg ===========
+Sp = ['aba', 'baa', 'b']
+Sm = ['a', 'bab', 'aaa']
+
+print(contruir_dawg(Sp, Sm))
