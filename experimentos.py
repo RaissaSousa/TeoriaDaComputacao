@@ -1,4 +1,4 @@
-from DAWG import contruir_dawg
+from DAWG import contruir_dawg, contruir_dawg_arquivo, testar_dawg_arquivo, testar_dawg_arquivo_convertendo_AFD
 from utils import open_automaton, convert_afn_to_afd
 import AFN
 import AFD
@@ -23,8 +23,12 @@ afn_4 = open_automaton('afn_4.json')
 afd = convert_afn_to_afd(afn_4)
 print(afd)
 
-# =============== dawg ===========
+# =============== dawg videos===========
 Sp = ['aba', 'baa', 'b']
 Sm = ['a', 'bab', 'aaa']
 
-print(contruir_dawg(Sp, Sm))
+print(contruir_dawg(Sp, Sm, ['a', 'b']))
+
+# ================= dawg arquivos
+dawg = contruir_dawg_arquivo('waltz.txt')
+testar_dawg_arquivo(dawg, 'waltzdb.csv')

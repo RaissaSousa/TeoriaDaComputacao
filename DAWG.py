@@ -1,5 +1,8 @@
 from copy import deepcopy as copy
+
+import AFD
 import AFN
+
 
 def _ordenar_potencia(potencia):
     potencia_ordenada = {}
@@ -94,8 +97,8 @@ def _build(dawg, estados):
     return novos_estados
 
 
-def contruir_dawg(S_plus, S_minus):
-    dawg = {'initial': ','.join(S_plus), 'final': ['{e}'], 'alphabet': ['a', 'b'], 'states': {'{e}': {}}}
+def contruir_dawg(S_plus, S_minus, alphabet):
+    dawg = {'initial': ','.join(S_plus), 'final': ['{e}'], 'alphabet': alphabet, 'states': {'{e}': {}}}
     novos_estados = [dawg['initial'].split(',')]
 
     while len(novos_estados) > 0:
@@ -105,4 +108,97 @@ def contruir_dawg(S_plus, S_minus):
             novos_estados.remove(novo_estado)
 
     dawg_e = _extend(dawg, S_minus)
-    print(dawg_e)
+
+    return dawg_e
+
+
+def _open_dawg_arquivo(path):
+    f = open(path, "r")
+    lines = f.readlines()
+    S_plus = []
+    S_minus = []
+    alphabet = []
+
+    for x in lines:
+        if x == '&':
+            break
+        string, classe = x.split('\t')
+        if '+' in classe:
+            S_plus.append(string)
+        else:
+            S_minus.append(string)
+
+        alphabet += list(string)
+    f.close()
+
+    alphabet = list(set(alphabet))
+
+    return [S_plus, S_minus, alphabet]
+
+
+def _open_teste_dawg_arquivo(path):
+    f = open(path, "r")
+    lines = f.readlines()
+    S_plus = []
+    S_minus = []
+
+    for x in lines:
+        if 'Classification' in x:
+            continue
+        classe, string = x.split(',')
+        string = string.replace('\n', '')
+        if 'non-amyloid' in classe:
+            S_minus.append(string)
+        else:
+            S_plus.append(string)
+    f.close()
+
+    return [S_plus, S_minus]
+
+
+def contruir_dawg_arquivo(path):
+    S_plus, S_minus, alphabet = _open_dawg_arquivo(path)
+
+    dawg = contruir_dawg(S_plus, S_minus, alphabet)
+
+    return dawg
+
+
+def testar_dawg_arquivo(dawg, path):
+    [S_plus, S_minus] = _open_teste_dawg_arquivo(path)
+    acertos = 0
+    total = len(S_plus) + len(S_minus)
+    tempo = []
+
+    for string in S_minus:
+        reposta, _ = AFN.testar_string(dawg, string)
+        if not reposta:
+            acertos += 1
+
+    for string in S_plus:
+        reposta, _ = AFN.testar_string(dawg, string)
+        if reposta:
+            acertos += 1
+
+    porcentagem = acertos/total * 100
+    print('Porcentagem de acertos: {:.2f}%'.format(porcentagem))
+
+
+def testar_dawg_arquivo_convertendo_AFD(dawg, path):
+    [S_plus, S_minus] = _open_teste_dawg_arquivo(path)
+    acertos = 0
+    total = len(S_plus) + len(S_minus)
+    tempo = []
+
+    for string in S_minus:
+        reposta = AFD.testar_string(dawg, string)
+        if not reposta:
+            acertos += 1
+
+    for string in S_plus:
+        reposta = AFN.testar_string(dawg, string)
+        if reposta:
+            acertos += 1
+
+    porcentagem = acertos/total * 100
+    print('Porcentagem de acertos: {:.2f}%'.format(porcentagem))
