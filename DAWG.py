@@ -195,6 +195,7 @@ def testar_dawg_arquivo_convertendo_AFD(dawg, path):
     acertos = 0
     total = len(S_plus) + len(S_minus)
 
+    print('convertendo...')
     dawg = convert_afn_to_afd(dawg)
 
     start = time.time()
