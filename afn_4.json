@@ -1,6 +1,7 @@
 {
   "initial": "q1",
   "final": ["q4"],
+  "alphabet": ["0", "1"],
   "states": {
     "q1": {
       "0": ["q1", "q2"],

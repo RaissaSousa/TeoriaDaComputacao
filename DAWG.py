@@ -102,7 +102,7 @@ def _build(dawg, estados):
 
 
 def contruir_dawg():
-    dawg = {'initial': ','.join(Sp), 'final': ['{e}'], 'alphabet': {'a', 'b'}, 'states': {'{e}': {}}}
+    dawg = {'initial': ','.join(Sp), 'final': ['{e}'], 'alphabet': ['a', 'b'], 'states': {'{e}': {}}}
     novos_estados = [dawg['initial'].split(',')]
 
     while len(novos_estados) > 0:
