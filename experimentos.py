@@ -32,3 +32,4 @@ print(contruir_dawg(Sp, Sm, ['a', 'b']))
 # ================= dawg arquivos
 dawg = contruir_dawg_arquivo('waltz.txt')
 testar_dawg_arquivo(dawg, 'waltzdb.csv')
+testar_dawg_arquivo_convertendo_AFD(dawg, 'waltzdb.csv')

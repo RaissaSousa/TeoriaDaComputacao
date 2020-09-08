@@ -1,7 +1,8 @@
 from copy import deepcopy as copy
-
+from utils import convert_afn_to_afd
 import AFD
 import AFN
+import time
 
 
 def _ordenar_potencia(potencia):
@@ -68,7 +69,7 @@ def _extend(dawg, S_minus):
 
 
 def _build(dawg, estados):
-    rotulo_do_estado = ','.join(estados)
+    rotulo_do_estado = ';'.join(estados)
     dawg['states'][rotulo_do_estado] = {}
     novos_estados = []
 
@@ -91,15 +92,16 @@ def _build(dawg, estados):
                 dawg['states'][rotulo_do_estado][simbolo].append('{e}') # com o vazio e adicionado a transicao para o estado final
 
         if len(proximos_estados) > 0:
-            dawg['states'][rotulo_do_estado][simbolo].append(','.join(proximos_estados))
+            dawg['states'][rotulo_do_estado][simbolo].append(';'.join(proximos_estados))
             novos_estados.append(proximos_estados)
 
     return novos_estados
 
 
 def contruir_dawg(S_plus, S_minus, alphabet):
-    dawg = {'initial': ','.join(S_plus), 'final': ['{e}'], 'alphabet': alphabet, 'states': {'{e}': {}}}
-    novos_estados = [dawg['initial'].split(',')]
+    # a utilização de ';' ao inves de ',' se da para nao ter conflito na hora da conversao para AFD
+    dawg = {'initial': ';'.join(S_plus), 'final': ['{e}'], 'alphabet': alphabet, 'states': {'{e}': {}}}
+    novos_estados = [dawg['initial'].split(';')]
 
     while len(novos_estados) > 0:
         for novo_estado in novos_estados.copy():
@@ -168,8 +170,8 @@ def testar_dawg_arquivo(dawg, path):
     [S_plus, S_minus] = _open_teste_dawg_arquivo(path)
     acertos = 0
     total = len(S_plus) + len(S_minus)
-    tempo = []
 
+    start = time.time()
     for string in S_minus:
         reposta, _ = AFN.testar_string(dawg, string)
         if not reposta:
@@ -180,8 +182,12 @@ def testar_dawg_arquivo(dawg, path):
         if reposta:
             acertos += 1
 
+    end = time.time()
+    tempo = end - start
+
     porcentagem = acertos/total * 100
     print('Porcentagem de acertos: {:.2f}%'.format(porcentagem))
+    print('media de tempo: {}s'.format(tempo/total))
 
 
 def testar_dawg_arquivo_convertendo_AFD(dawg, path):
@@ -189,6 +195,10 @@ def testar_dawg_arquivo_convertendo_AFD(dawg, path):
     acertos = 0
     total = len(S_plus) + len(S_minus)
     tempo = []
+
+    dawg = convert_afn_to_afd(dawg)
+
+    start = time.time()
 
     for string in S_minus:
         reposta = AFD.testar_string(dawg, string)
@@ -200,5 +210,9 @@ def testar_dawg_arquivo_convertendo_AFD(dawg, path):
         if reposta:
             acertos += 1
 
+    end = time.time()
+    tempo = end - start
+
     porcentagem = acertos/total * 100
-    print('Porcentagem de acertos: {:.2f}%'.format(porcentagem))
+    print('Porcentagem de acertos convertendo: {:.2f}%'.format(porcentagem))
+    print('media de tempo com AFD: {}s'.format(tempo/total))

@@ -13,10 +13,14 @@ def _union_dict(a, b):
 def _get_new_states(afn, estado):
     afn['initial'] = estado
     funcao_de_transicao = {}
-    for simbolo in afn['states'][estado]:
-        _, estados_alcancaveis = AFN.testar_string(afn, simbolo)
-        novo_estado = ','.join(estados_alcancaveis)
-        funcao_de_transicao.update({simbolo: novo_estado})          #mescla os dicionarios
+    try:
+        for simbolo in afn['states'][estado]:
+            _, estados_alcancaveis = AFN.testar_string(afn, simbolo)
+            novo_estado = ','.join(estados_alcancaveis)
+            funcao_de_transicao.update({simbolo: novo_estado})          #mescla os dicionarios
+    except:
+        print('as')
+
     return funcao_de_transicao
 
 
